@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Schwefel Convergence Visualization</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 2rem;
+      background: #0a0a12;
+      font-family: sans-serif;
+      color: #ccc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h2 {
+      font-size: 16px;
+      font-weight: 500;
+      margin: 0 0 1rem;
+      color: #eee;
+      letter-spacing: 0.02em;
+    }
+    canvas {
+      width: 100%;
+      max-width: 680px;
+      border-radius: 10px;
+      background: #0a0a12;
+      display: block;
+    }
+    .controls {
+      display: flex;
+      gap: 16px;
+      margin-top: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      max-width: 680px;
+      width: 100%;
+    }
+    button {
+      font-size: 13px;
+      padding: 5px 14px;
+      border-radius: 6px;
+      border: 0.5px solid #555;
+      background: transparent;
+      color: #ccc;
+      cursor: pointer;
+    }
+    button:hover { background: #1e1e2e; }
+    .legend { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+    .leg { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #aaa; }
+    .dot { width: 10px; height: 10px; border-radius: 2px; }
+  </style>
+</head>
+<body>
+  <h2>Schwefel Function Solution Converging to Global Optimum</h2>
+  <canvas id="c" width="680" height="500"></canvas>
+  <div class="controls">
+    <button id="btnRestart">↺ restart</button>
+    <span style="font-size:13px;">Generation: <b id="genLabel">0</b></span>
+    <span style="font-size:13px;">Best fitness: <b id="fitLabel">—</b></span>
+    <div class="legend">
+      <div class="leg"><div class="dot" style="background:#7fcfff;"></div> solution path</div>
+      <div class="leg"><div class="dot" style="background:#f5a623;"></div> global optimum</div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('c');
+    const ctx = canvas.getContext('2d');
+    const W = 680, H = 500;
+
+    function schwefel2d(x, y) {
+      return 418.9829*2 - (x*Math.sin(Math.sqrt(Math.abs(x))) + y*Math.sin(Math.sqrt(Math.abs(y))));
+    }
+
+    const RANGE = 500;
+    const COLS = 80, ROWS = 80;
+    const ISO_ANG = Math.PI / 6;
+    const SCALE_X = 4.5, SCALE_Y = 2.2, SCALE_Z = 0.018;
+    const OX = W/2, OY = 380;
+
+    function toScreen(gx, gy, gz) {
+      const wx = (gx - COLS/2) * SCALE_X;
+      const wy = (gy - ROWS/2) * SCALE_Y;
+      const sx = OX + (wx - wy) * Math.cos(ISO_ANG);
+      const sy = OY + (wx + wy) * Math.sin(ISO_ANG) - gz * SCALE_Z;
+      return [sx, sy];
+    }
+
+    function valToColor(v, min, max) {
+      const t = Math.max(0, Math.min(1, (v - min)/(max - min)));
+      const r = Math.round(20 + t*180);
+      const g = Math.round(10 + (1-Math.abs(t-0.5)*2)*120);
+      const b = Math.round(180 - t*140);
+      return `rgb(${r},${g},${b})`;
+    }
+
+    const grid = [];
+    let minV = Infinity, maxV = -Infinity;
+    for (let j = 0; j < ROWS; j++) {
+      grid[j] = [];
+      for (let i = 0; i < COLS; i++) {
+        const x = -RANGE + (i/(COLS-1))*2*RANGE;
+        const y = -RANGE + (j/(ROWS-1))*2*RANGE;
+        const v = schwefel2d(x, y);
+        grid[j][i] = v;
+        if (v < minV) minV = v;
+        if (v > maxV) maxV = v;
+      }
+    }
+
+    function drawSurface() {
+      ctx.clearRect(0, 0, W, H);
+      for (let j = ROWS-2; j >= 0; j--) {
+        for (let i = 0; i < COLS-1; i++) {
+          const v = (grid[j][i]+grid[j+1][i]+grid[j][i+1]+grid[j+1][i+1])/4;
+          const [x0,y0] = toScreen(i,   j,   grid[j][i]);
+          const [x1,y1] = toScreen(i+1, j,   grid[j][i+1]);
+          const [x2,y2] = toScreen(i+1, j+1, grid[j+1][i+1]);
+          const [x3,y3] = toScreen(i,   j+1, grid[j+1][i]);
+          ctx.beginPath();
+          ctx.moveTo(x0,y0); ctx.lineTo(x1,y1); ctx.lineTo(x2,y2); ctx.lineTo(x3,y3);
+          ctx.closePath();
+          ctx.fillStyle = valToColor(v, minV, maxV);
+          ctx.fill();
+          ctx.strokeStyle = 'rgba(0,0,0,0.18)';
+          ctx.lineWidth = 0.3;
+          ctx.stroke();
+        }
+      }
+    }
+
+    function worldToGrid(wx, wy) {
+      return [
+        (wx + RANGE) / (2*RANGE) * (COLS-1),
+        (wy + RANGE) / (2*RANGE) * (ROWS-1)
+      ];
+    }
+
+    function getZ(wx, wy) {
+      const [gi, gj] = worldToGrid(wx, wy);
+      const i = Math.min(COLS-2, Math.max(0, Math.floor(gi)));
+      const j = Math.min(ROWS-2, Math.max(0, Math.floor(gj)));
+      return grid[j][i];
+    }
+
+    const OPT = [420.97, 420.97];
+    const OPT_GRID = worldToGrid(OPT[0], OPT[1]);
+
+    let path = [];
+    let frame = 0;
+    let animId = null;
+    const TOTAL_FRAMES = 200;
+
+    function generatePath() {
+      path = [];
+      let wx = Math.random()*600 - 300;
+      let wy = Math.random()*600 - 300;
+      let sigma = 120;
+      for (let f = 0; f <= TOTAL_FRAMES; f++) {
+        const t = f / TOTAL_FRAMES;
+        const bias = t * t;
+        wx += (OPT[0] - wx) * bias * 0.06 + (Math.random()-0.5) * sigma * (1-bias);
+        wy += (OPT[1] - wy) * bias * 0.06 + (Math.random()-0.5) * sigma * (1-bias);
+        wx = Math.max(-499, Math.min(499, wx));
+        wy = Math.max(-499, Math.min(499, wy));
+        sigma *= 0.985;
+        path.push([wx, wy]);
+      }
+    }
+
+    function drawOptimum() {
+      const [gx, gy] = OPT_GRID;
+      const z = getZ(OPT[0], OPT[1]);
+      const [sx, sy] = toScreen(gx, gy, z);
+      ctx.beginPath();
+      ctx.arc(sx, sy - 2, 7, 0, Math.PI*2);
+      ctx.fillStyle = '#f5a623';
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.fillStyle = '#f5a623';
+      ctx.font = '11px sans-serif';
+      ctx.fillText('x* ≈ (421, 421)', sx + 10, sy - 4);
+    }
+
+    function drawPath(upTo) {
+      if (upTo < 1) return;
+      ctx.beginPath();
+      for (let k = 0; k <= upTo && k < path.length; k++) {
+        const [wx, wy] = path[k];
+        const [gi, gj] = worldToGrid(wx, wy);
+        const z = getZ(wx, wy);
+        const [sx, sy] = toScreen(gi, gj, z);
+        if (k === 0) ctx.moveTo(sx, sy);
+        else ctx.lineTo(sx, sy);
+      }
+      ctx.strokeStyle = 'rgba(127,207,255,0.7)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      const [wx, wy] = path[upTo];
+      const [gi, gj] = worldToGrid(wx, wy);
+      const z = getZ(wx, wy);
+      const [sx, sy] = toScreen(gi, gj, z);
+      ctx.beginPath();
+      ctx.arc(sx, sy, 5, 0, Math.PI*2);
+      ctx.fillStyle = '#7fcfff';
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    function animate() {
+      drawSurface();
+      drawOptimum();
+      drawPath(frame);
+      document.getElementById('genLabel').textContent = frame;
+      if (frame < path.length) {
+        const [wx, wy] = path[frame];
+        document.getElementById('fitLabel').textContent = schwefel2d(wx, wy).toFixed(2);
+      }
+      if (frame < TOTAL_FRAMES) {
+        frame++;
+        animId = requestAnimationFrame(animate);
+      }
+    }
+
+    function start() {
+      if (animId) cancelAnimationFrame(animId);
+      frame = 0;
+      generatePath();
+      animate();
+    }
+
+    document.getElementById('btnRestart').addEventListener('click', start);
+    drawSurface();
+    start();
+  </script>
+</body>
+</html>
