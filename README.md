@@ -130,9 +130,7 @@ Metrics tracked across all experiments:
 | 10D | ~0% | Finds local minima; some coordinates near 420 in lucky runs |
 | 20D | ~0% | Same as 10D |
 
-<img src="results\global_single_sigma\comma\fig_1.png" width="32%" />
-<img src="results\global_single_sigma\comma\fig_2.png" width="32%" />
-<img src="results\global_single_sigma\comma\fig_3.png" width="32%" />
+<img src="results\global_single_sigma\comma\fig_1.png" width="32%" /><img src="results\global_single_sigma\comma\fig_2.png" width="32%" /><img src="results\global_single_sigma\comma\fig_3.png" width="32%" />
 
 > *Graphs shown: best fitness history, avg fitness history, sigma history — for 3D.*  
 > *Observation: the comma variant sometimes climbs to the global basin then gets displaced by a bad offspring batch — visible as a fitness dip before the final plateau.*
@@ -147,9 +145,7 @@ Metrics tracked across all experiments:
 | 10D | Low | More resilient than comma; finds 420-class coords more consistently |
 | 20D | Low | Same as 10D |
 
-<img src="results\global_single_sigma\plus\fig_1.png" width="32%" />
-<img src="results\global_single_sigma\plus\fig_2.png" width="32%" />
-<img src="results\global_single_sigma\plus\fig_3.png" width="32%" />
+<img src="results\global_single_sigma\plus\fig_1.png" width="32%" /><img src="results\global_single_sigma\plus\fig_2.png" width="32%" /><img src="results\global_single_sigma\plus\fig_3.png" width="32%" />
 
 > *Graphs shown: best fitness history, avg fitness history, sigma history — for 3D.*
 
@@ -167,9 +163,7 @@ Metrics tracked across all experiments:
 | 10D | Similar to single sigma comma | — |
 | 20D | Similar to single sigma comma | — |
 
-<img src="results\global_sigma_per_dim\comma\fig_1.png" width="32%" />
-<img src="results\global_sigma_per_dim\comma\fig_2.png" width="32%" />
-<img src="results\global_sigma_per_dim\comma\fig_3.png" width="32%" />
+<img src="results\global_sigma_per_dim\comma\fig_1.png" width="32%" /><img src="results\global_sigma_per_dim\comma\fig_2.png" width="32%" /><img src="results\global_sigma_per_dim\comma\fig_3.png" width="32%" />
 
 > *Graphs shown: fitness and sigma histories for 3D, showing the characteristic "hover" above the basin.*
 
@@ -183,9 +177,7 @@ Metrics tracked across all experiments:
 | 10D | Similar to single sigma plus | — |
 | 20D | Similar to single sigma plus | — |
 
-<img src="results\global_sigma_per_dim\plus\fig_1.png" width="32%" />
-<img src="results\global_sigma_per_dim\plus\fig_2.png" width="32%" />
-<img src="results\global_sigma_per_dim\plus\fig_3.png" width="32%" />
+<img src="results\global_sigma_per_dim\plus\fig_1.png" width="32%" /><img src="results\global_sigma_per_dim\plus\fig_2.png" width="32%" /><img src="results\global_sigma_per_dim\plus\fig_3.png" width="32%" />
 
 > *Graphs shown: 3D fitness histories illustrating elitism holding solutions in the basin.*
 
@@ -203,9 +195,7 @@ Metrics tracked across all experiments:
 | 10D | ~2–5% | Finds good local minima (6–7/10 coords ≈ 420.xx, fitness often < 300–400) |
 | 20D | ~0% | Search space too large; still better than random |
 
-<img src="results\sigma_per_dim_per_indi\comma\fig_1.png" width="32%" />
-<img src="results\sigma_per_dim_per_indi\comma\fig_2.png" width="32%" />
-<img src="results\sigma_per_dim_per_indi\comma\fig_3.png" width="32%" />
+<img src="results\sigma_per_dim_per_indi\comma\fig_1.png" width="32%" /><img src="results\sigma_per_dim_per_indi\comma\fig_2.png" width="32%" /><img src="results\sigma_per_dim_per_indi\comma\fig_3.png" width="32%" />
 
 #### Plus (µ + λ)
 
@@ -217,9 +207,7 @@ Metrics tracked across all experiments:
 | 10D | ~2–5% | Same as comma |
 | 20D | ~0% | Same as comma |
 
-<img src="results\sigma_per_dim_per_indi\plus\fig_1.png" width="32%" />
-<img src="results\sigma_per_dim_per_indi\plus\fig_2.png" width="32%" />
-<img src="results\sigma_per_dim_per_indi\plus\fig_3.png" width="32%" />
+<img src="results\sigma_per_dim_per_indi\plus\fig_1.png" width="32%" /><img src="results\sigma_per_dim_per_indi\plus\fig_2.png" width="32%" /><img src="results\sigma_per_dim_per_indi\plus\fig_3.png" width="32%" />
 
 > *Graphs shown: best fitness, avg fitness, and mean-sigma-per-dimension histories for 3D.*  
 > *The sigma-per-dim plot reveals how each dimension independently tunes its step-size as the search zooms in.*
@@ -238,13 +226,9 @@ Metrics tracked across all experiments:
 | 10D | Low | Same story — consistent local minima but global optimum out of reach |
 | 20D | Low | Slightly worse than 10D at finding quality local minima |
 
-<img src="results\cma-es\fig_1.png" width="32%" />
-<img src="results\cma-es\fig_2.png" width="32%" />
-<img src="results\cma-es\fig_3.png" width="32%" />
+<img src="results\cma-es\fig_1.png" width="32%" /><img src="results\cma-es\fig_2.png" width="32%" /><img src="results\cma-es\fig_3.png" width="32%" />
 
-<img src="results\cma-es\fig_01.png" width="32%" />
-<img src="results\cma-es\fig_02.png" width="32%" />
-<img src="results\cma-es\fig_03.png" width="32%" />
+<img src="results\cma-es\fig_01.png" width="32%" /><img src="results\cma-es\fig_02.png" width="32%" /><img src="results\cma-es\fig_03.png" width="32%" />
 
 > *Graphs shown: best fitness history, avg fitness history, global sigma history — for 3D.(for both convergence and failed case)*  
 > *Note: CMA's covariance adapts to the basin it first enters; Schwefel's deceptiveness means that basin is rarely the global one.*
