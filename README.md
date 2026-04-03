@@ -32,7 +32,13 @@ The Schwefel function is notoriously **deceptive**: its global minimum (≈ 0 at
 
 ![schwefel convergence](results/schwefel_convergence.gif)
 
-[Try it interactively here](https://reek312.github.io/Solving_Schwefel_EA05/schwefel_viz.html)
+
+<p align="center">
+  <a href="https://reek312.github.io/Solving_Schwefel_EA05/schwefel_viz.html">
+    <img src="https://img.shields.io/badge/Try%20it-Interactively-brightgreen?style=for-the-badge"/>
+  </a>
+</p>
+
 
 ---
 
