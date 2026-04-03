@@ -30,7 +30,9 @@ $$f(\mathbf{x}) = 418.9829 \cdot d - \sum_{i=1}^{d} x_i \sin\!\left(\sqrt{|x_i|}
 
 The Schwefel function is notoriously **deceptive**: its global minimum (≈ 0 at **x\* ≈ 420.97** in each dimension) is geometrically far from the second-best basin, and the landscape is riddled with local minima. Small perturbations can send a search trajectory into entirely different basins. This makes it an ideal stress-test for ES variants.
 
-![schwefel convergence](results/schwefel_convergence.gif)
+<p align="center">
+  <img src="results/schwefel_convergence.gif" alt="schwefel convergence" width="600"/>
+</p>
 
 
 <p align="center">
